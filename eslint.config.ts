@@ -46,6 +46,10 @@ export default {
                 ignoreRestSiblings: true,
             },
         ],
+        'react/jsx-curly-brace-presence': [
+            'error',
+            { props: 'always', children: 'never', propElementValues: 'always' },
+        ],
         indent: ['error', 4, { SwitchCase: 1, ignoredNodes: ['PropertyDefinition'] }],
         'linebreak-style': ['error', 'unix'],
         quotes: ['error', 'single', { avoidEscape: true }],
