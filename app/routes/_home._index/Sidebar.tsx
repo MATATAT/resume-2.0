@@ -7,7 +7,7 @@ import { useResume } from '~/context/ResumeContext';
 export const Sidebar = () => {
     return (
         <Box as={'aside'}>
-            <VStack align={['start', 'end']} gap={3}>
+            <VStack align={['flex-start', 'flex-end']} gap={3}>
                 <SideBlock title={'Contact'}>
                     <Contacts />
                 </SideBlock>
@@ -49,7 +49,7 @@ const Contacts = () => {
     };
 
     return (
-        <Stack>
+        <Stack align={['flex-start', 'flex-end']}>
             <LabelWithIcon contact={contact.email} icon={<MdEmail />} />
             <LabelWithIcon contact={contact.phone} icon={<MdPhone />} />
             <LabelWithIcon contact={contact.location} icon={<MdLocationPin />} />
@@ -61,25 +61,39 @@ const Contacts = () => {
 };
 
 const Education = () => {
+    const { education } = useResume();
+
     return (
-        <Flex direction={'column'} align={['start', 'end']}>
-            <Box>Washington State University</Box>
-            <Box>Pullman, WA</Box>
-            <Box>BS Computer Science</Box>
-            <Box>2017</Box>
-            <Box>GPA 3.7</Box>
+        <Flex direction={'column'} align={['flex-start', 'flex-end']}>
+            <Box>{education.name}</Box>
+            <Box>{education.position}</Box>
+            <Box>{education.location}</Box>
+            <Box>
+                {education.startDate} - {education.endDate}
+            </Box>
         </Flex>
     );
 };
 
 const Skills = () => {
+    const { qualifications } = useResume();
+
     return (
-        <Flex direction={'column'} align={['start', 'end']}>
-            <Box>React</Box>
-            <Box>JavaScript</Box>
-            <Box>TypeScript</Box>
-            <Box>Node.js</Box>
-            <Box>GraphQL</Box>
-        </Flex>
+        <Stack gap={3}>
+            {qualifications.map((qualification, index) => (
+                <Stack key={index} align={['flex-start', 'flex-end']}>
+                    <Box key={index} fontSize={'sm'} fontWeight={'bold'} textTransform={'uppercase'}>
+                        {qualification.title}
+                    </Box>
+                    <Flex direction={'column'} align={['flex-start', 'flex-end']}>
+                        {qualification.children.map((note, index) => (
+                            <Box key={index} fontSize={'sm'}>
+                                {note}
+                            </Box>
+                        ))}
+                    </Flex>
+                </Stack>
+            ))}
+        </Stack>
     );
 };
