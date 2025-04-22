@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Icon, Stack, VStack } from '@chakra-ui/react';
+import { Box, Flex, Heading, Icon, Stack, VStack, Wrap } from '@chakra-ui/react';
 import type React from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa6';
 import { MdEmail, MdLanguage, MdLocationPin, MdPhone } from 'react-icons/md';
@@ -6,8 +6,8 @@ import { useResume } from '~/context/ResumeContext';
 
 export const Sidebar = () => {
     return (
-        <Box as={'aside'}>
-            <VStack align={['flex-start', 'flex-end']} gap={3}>
+        <Box as={'aside'} data-print-sidebar-container>
+            <VStack align={['flex-start', 'flex-end']} gap={3} data-print-sidebar-content>
                 <SideBlock title={'Contact'}>
                     <Contacts />
                 </SideBlock>
@@ -27,7 +27,7 @@ interface SideBlockProps extends React.PropsWithChildren {
 }
 const SideBlock = ({ title, children }: SideBlockProps) => {
     return (
-        <Stack align={['flex-start', 'flex-end']}>
+        <Stack align={['flex-start', 'flex-end']} data-print-sidebar-block>
             <Heading as={'h3'} fontWeight={'bold'} textTransform={'uppercase'}>
                 {title}
             </Heading>
@@ -79,19 +79,19 @@ const Skills = () => {
     const { qualifications } = useResume();
 
     return (
-        <Stack gap={3}>
+        <Stack gap={2} maxW={'250px'} data-print-skill-block>
             {qualifications.map((qualification, index) => (
                 <Stack key={index} align={['flex-start', 'flex-end']}>
-                    <Box key={index} fontSize={'sm'} fontWeight={'bold'} textTransform={'uppercase'}>
+                    <Box fontSize={'sm'} fontWeight={'bold'} textTransform={'uppercase'}>
                         {qualification.title}
                     </Box>
-                    <Flex direction={'column'} align={['flex-start', 'flex-end']}>
-                        {qualification.children.map((note, index) => (
-                            <Box key={index} fontSize={'sm'}>
-                                {note}
+                    <Wrap justify={['flex-start', 'flex-end']} maxW={'250px'}>
+                        {qualification.children.map((skill, index) => (
+                            <Box key={index} fontSize={'sm'} as={'span'} data-print-skill-item>
+                                {skill}
                             </Box>
                         ))}
-                    </Flex>
+                    </Wrap>
                 </Stack>
             ))}
         </Stack>

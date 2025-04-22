@@ -1,0 +1,133 @@
+@media print {
+    @page {
+        size: letter portrait;
+        margin: 0.5in;
+    }
+
+    body {
+        background: white !important;
+        min-height: 100vh !important;
+        padding: 0 !important;
+    }
+
+    /* Base print styles */
+    * {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Fix grid layout for print */
+    [data-print-grid] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+        min-height: auto !important;
+    }
+
+    /* Fix sidebar and main content order */
+    [data-print-sidebar] {
+        width: 100% !important;
+        order: 2 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important; /* reduced from 2rem */
+        justify-content: space-between !important;
+        padding: 0 !important;
+    }
+
+    /* Adjust spacing for sidebar items */
+    [data-print-sidebar] [data-chakra-stack] {
+        align-items: flex-start !important;
+        gap: 0.25rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Reduce spacing between sidebar sections */
+    [data-print-sidebar] h3 {
+        margin: 0 0 0.25rem 0 !important;
+        font-size: 1rem !important;
+    }
+
+    [data-print-main] {
+        width: 100% !important;
+        order: 1 !important;
+    }
+
+    /* Adjust sidebar layout for print */
+    [data-print-sidebar-container] {
+        width: 100% !important;
+    }
+
+    [data-print-sidebar-content] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 2rem !important;
+        align-items: flex-start !important;
+    }
+
+    [data-print-sidebar-block] {
+        flex: 1 1 300px !important;
+        align-items: flex-start !important;
+        max-width: none !important;
+    }
+
+    /* Reset any right alignment */
+    [data-print-sidebar-block] > * {
+        text-align: left !important;
+        align-items: flex-start !important;
+    }
+
+    /* Compact sidebar text */
+    [data-print-sidebar] [data-chakra-stack] > * {
+        line-height: 1.2 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Adjust icon spacing */
+    [data-print-sidebar] [data-chakra-stack] [role='group'] {
+        gap: 0.25rem !important;
+    }
+
+    /* Adjust spacing and breaks */
+    h1,
+    h2,
+    h3 {
+        page-break-after: avoid;
+        margin-top: 1rem !important;
+    }
+
+    /* Adjust list spacing */
+    ul,
+    ol {
+        padding-left: 1.5rem !important;
+    }
+
+    /* Remove any borders except the header */
+    [data-print-border] {
+        border-color: black !important;
+    }
+
+    /* Hide scrollbars and other screen-only elements */
+    ::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    [data-print-skill-block] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 0.25rem 0.75rem !important;
+        max-width: fit-content !important;
+    }
+
+    [data-print-skill-item] {
+        white-space: nowrap !important;
+    }
+}

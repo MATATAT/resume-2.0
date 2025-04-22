@@ -5,7 +5,7 @@ export const Header = () => {
     const { name, title } = useResume();
 
     return (
-        <VStack gap={2} py={8} borderBottom={3} borderStyle={'solid'} borderColor={'gray.700'} px={4}>
+        <VStack gap={2} py={8} borderBottom={3} borderStyle={'solid'} borderColor={'gray.700'} px={4} data-print-border>
             <Heading as={'h1'} size={'6xl'} textAlign={'center'} textTransform={'uppercase'} color={'white'}>
                 {name}
             </Heading>
