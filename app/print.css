@@ -130,4 +130,9 @@
     [data-print-skill-item] {
         white-space: nowrap !important;
     }
+
+    /* Hide elements marked for print hiding */
+    [data-print-hide] {
+        display: none !important;
+    }
 }
