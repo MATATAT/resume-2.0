@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { Resume } from '~/dto/Resume';
+import type { Resume } from '~/dto/resume';
 
 const ResumeContext = createContext<Resume | undefined>(undefined);
 

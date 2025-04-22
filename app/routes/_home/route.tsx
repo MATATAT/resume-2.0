@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 import { ResumeProvider } from '~/context/ResumeContext';
-import type { Resume } from '~/dto/Resume';
+import type { Resume } from '~/dto/resume';
 import type { Route } from './+types/route';
 import { Header } from './Header';
 
