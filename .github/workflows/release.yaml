@@ -40,8 +40,7 @@ jobs:
 
             - name: Upload to S3
               run: |
-                  aws s3 cp ./dist/ s3://$S3_BUCKET_NAME/ --recursive --exclude "*" --include "*.js" --include "*.json" --include "*.html" --include "*.css" --include "*.png" --include "*.jpg" --include "*.gif" --include "*.svg"
-                  aws s3 cp ./dist/ s3://$S3_BUCKET_NAME/ --recursive
+                  aws s3 cp ./build/client/ s3://$S3_BUCKET_NAME/ --recursive
               env:
                   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
 
