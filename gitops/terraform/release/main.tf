@@ -1,8 +1,25 @@
-locals {
-  app_name      = "resume"
-  aws_region    = "us-west-2"
-  github_owner  = "MATATAT"
-  github_repo   = "resume-2.0"
-  github_branch = "main"
-  domain_name   = "mattmacdonald.link"
+provider "aws" {
+  region = var.aws_region
+
+  default_tags {
+    tags = {
+      Project     = "Resume"
+      Environment = "Production"
+      ManagedBy   = "Terraform"
+    }
+  }
+}
+
+// Need a us-east-1 region for ACM certificate with CloudFront
+provider "aws" {
+  alias  = "us-east"
+  region = "us-east-1"
+
+  default_tags {
+    tags = {
+      Project     = "Resume"
+      Environment = "Production"
+      ManagedBy   = "Terraform"
+    }
+  }
 }
