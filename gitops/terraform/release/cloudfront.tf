@@ -19,7 +19,7 @@ module "cdn" {
 
   name                               = "cdn-${local.domain_name}"
   origin_bucket                      = module.s3_bucket.bucket_id
-  aliases                            = ["cdn.${local.domain_name}"]
+  aliases                            = ["${local.domain_name}", "cdn.${local.domain_name}"]
   dns_alias_enabled                  = true
   block_origin_public_access_enabled = true
   parent_zone_id                     = data.aws_route53_zone.env.id
