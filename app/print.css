@@ -8,6 +8,7 @@
         background: white !important;
         min-height: 100vh !important;
         padding: 0 !important;
+        font-size: 11pt !important;
     }
 
     /* Base print styles */
@@ -37,6 +38,7 @@
         gap: 0.5rem !important; /* reduced from 2rem */
         justify-content: space-between !important;
         padding: 0 !important;
+        font-size: 10pt !important;
     }
 
     /* Adjust spacing for sidebar items */
@@ -129,6 +131,8 @@
 
     [data-print-skill-item] {
         white-space: nowrap !important;
+        line-height: normal !important;
+        font-size: 10pt !important;
     }
 
     /* Hide elements marked for print hiding */
