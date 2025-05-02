@@ -6,7 +6,7 @@ import { useResume } from '~/context/ResumeContext';
 
 export const Sidebar = () => {
     return (
-        <Box as={'aside'} data-print-sidebar-container>
+        <Box as={'aside'} pb={10} data-print-sidebar-container>
             <VStack align={['flex-start', 'flex-end']} gap={3} data-print-sidebar-content>
                 <SideBlock title={'Contact'}>
                     <Contacts />
