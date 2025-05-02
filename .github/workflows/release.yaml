@@ -1,0 +1,53 @@
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'src/**'
+            - '.github/workflows/release.yaml'
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            id-token: write
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 10.4.0
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 22.x
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Build
+              run: pnpm build
+
+            - name: Setup AWS CLI
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: ${{ secrets.AWS_ROLE }}
+                  aws-region: ${{ secrets.AWS_REGION }}
+
+            - name: Upload to S3
+              run: |
+                  aws s3 cp ./dist/ s3://$S3_BUCKET_NAME/ --recursive --exclude "*" --include "*.js" --include "*.json" --include "*.html" --include "*.css" --include "*.png" --include "*.jpg" --include "*.gif" --include "*.svg"
+                  aws s3 cp ./dist/ s3://$S3_BUCKET_NAME/ --recursive
+              env:
+                  S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+
+            # - name: Invalidate CloudFront
+            #   run: |
+            #       aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+            #   env:
+            #       CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
