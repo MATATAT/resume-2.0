@@ -10,7 +10,7 @@ export const Header = () => {
     };
 
     return (
-        <Box position='relative'>
+        <Box position='relative' bg={'headerBg'}>
             <IconButton
                 variant={'surface'}
                 aria-label='Print resume'
@@ -31,10 +31,16 @@ export const Header = () => {
                 px={4}
                 data-print-border
             >
-                <Heading as={'h1'} size={'6xl'} textAlign={'center'} textTransform={'uppercase'} color={'white'}>
+                <Heading as={'h1'} size={'6xl'} color={'headerTitle'} textAlign={'center'} textTransform={'uppercase'}>
                     {name}
                 </Heading>
-                <Heading as={'h2'} size={'xl'} color={'teal.400'} textTransform={'uppercase'} fontStyle={'italic'}>
+                <Heading
+                    as={'h2'}
+                    size={'xl'}
+                    color={'headerSubtitle'}
+                    textTransform={'uppercase'}
+                    fontStyle={'italic'}
+                >
                     {title}
                 </Heading>
             </VStack>

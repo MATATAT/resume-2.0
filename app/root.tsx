@@ -1,5 +1,6 @@
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import type { Route } from './+types/root';
+import { system } from './chakra-components/theme';
 import { Provider as ChakraProvider } from './chakra-components/ui/provider';
 import './print.css';
 
@@ -36,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
     return (
-        <ChakraProvider>
+        <ChakraProvider system={system}>
             <Outlet />
         </ChakraProvider>
     );
