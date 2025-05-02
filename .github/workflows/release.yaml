@@ -2,13 +2,10 @@ on:
     push:
         branches:
             - main
-        paths:
-            - 'src/**'
-            - 'package.json'
-            - 'pnpm-lock.yaml'
-            - 'tsconfig.json'
-            - 'vite.config.ts'
-            - '.github/workflows/release.yaml'
+        paths-ignore:
+            - 'README.md'
+            - '.vscode'
+            - 'gitops/*'
 
 jobs:
     release:
