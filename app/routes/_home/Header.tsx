@@ -31,7 +31,14 @@ export const Header = () => {
                 px={4}
                 data-print-border
             >
-                <Heading as={'h1'} size={'6xl'} color={'headerTitle'} textAlign={'center'} textTransform={'uppercase'}>
+                <Heading
+                    as={'h1'}
+                    size={'6xl'}
+                    color={'headerTitle'}
+                    textAlign={'center'}
+                    textTransform={'uppercase'}
+                    data-print-header-title
+                >
                     {name}
                 </Heading>
                 <Heading
@@ -40,6 +47,7 @@ export const Header = () => {
                     color={'headerSubtitle'}
                     textTransform={'uppercase'}
                     fontStyle={'italic'}
+                    data-print-header-subtitle
                 >
                     {title}
                 </Heading>
