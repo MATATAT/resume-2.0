@@ -26,12 +26,19 @@ export interface Institution {
     location: string;
     startDate: string;
     endDate: string;
+    summary: string;
     notes: Notes;
 }
 
 export interface Qualification {
+    id: string;
     title: string;
     children: Notes;
 }
 
-export type Notes = Array<string>;
+export interface CategoricalValue {
+    category: string;
+    values: Array<string>;
+}
+
+export type Notes = Array<string | CategoricalValue>;

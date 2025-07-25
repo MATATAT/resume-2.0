@@ -1,8 +1,12 @@
-import { Box, Flex, Heading, Icon, Link, Stack, VStack, Wrap } from '@chakra-ui/react';
+import { Box, Flex, Heading, Stack, Text, VStack } from '@chakra-ui/react';
 import type React from 'react';
-import { FaGithub, FaLinkedin } from 'react-icons/fa6';
-import { MdEmail, MdLanguage, MdLocationPin, MdPhone } from 'react-icons/md';
+import type { JSX } from 'react';
+import { FaDiamond, FaGithub, FaLinkedin, FaServer } from 'react-icons/fa6';
+import { MdCloud, MdEmail, MdLanguage, MdLocationPin, MdPhone, MdTv } from 'react-icons/md';
 import { useResume } from '~/context/ResumeContext';
+import type { CategoricalValue } from '~/dto/resume';
+import { OneDotIcon, ThreeDotIcon, TwoDotIcon } from '~/shared/components/LocalIcons';
+import { LabelWithIcon, LinkType } from './LabelWithIcon';
 
 export const Sidebar = () => {
     return (
@@ -39,54 +43,14 @@ const SideBlock = ({ title, children }: SideBlockProps) => {
 const Contacts = () => {
     const { contact } = useResume();
 
-    const LabelWithIcon = ({
-        contact,
-        icon,
-        clickableNav = LinkType.None,
-    }: {
-        contact: string;
-        icon: React.ReactNode;
-        clickableNav: LinkType;
-    }) => {
-        const convert = (contact: string, linkType: LinkType): string => {
-            switch (linkType) {
-                case LinkType.Mail:
-                    return `mailto:${contact}`;
-                case LinkType.Website:
-                    return `https://${contact}`;
-                case LinkType.Phone:
-                    return `tel:${contact}`;
-                case LinkType.Location:
-                    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact)}`;
-                default:
-                    return contact;
-            }
-        };
-
-        return (
-            <Stack direction={['row-reverse', 'row']} align={'center'} gap={2}>
-                <Box>
-                    {clickableNav ? (
-                        <Link href={convert(contact, clickableNav)} target='_blank' rel='noopener noreferrer'>
-                            {contact}
-                        </Link>
-                    ) : (
-                        contact
-                    )}
-                </Box>
-                <Icon boxSize={5}>{icon}</Icon>
-            </Stack>
-        );
-    };
-
     return (
         <Stack align={['flex-start', 'flex-end']}>
-            <LabelWithIcon contact={contact.email} icon={<MdEmail />} clickableNav={LinkType.Mail} />
-            <LabelWithIcon contact={contact.phone} icon={<MdPhone />} clickableNav={LinkType.Phone} />
-            <LabelWithIcon contact={contact.location} icon={<MdLocationPin />} clickableNav={LinkType.Location} />
-            <LabelWithIcon contact={contact.websites.personal} icon={<MdLanguage />} clickableNav={LinkType.Website} />
-            <LabelWithIcon contact={contact.websites.linkedIn} icon={<FaLinkedin />} clickableNav={LinkType.Website} />
-            <LabelWithIcon contact={contact.websites.gitHub} icon={<FaGithub />} clickableNav={LinkType.Website} />
+            <LabelWithIcon value={contact.email} icon={<MdEmail />} clickableNav={LinkType.Mail} />
+            <LabelWithIcon value={contact.phone} icon={<MdPhone />} clickableNav={LinkType.Phone} />
+            <LabelWithIcon value={contact.location} icon={<MdLocationPin />} clickableNav={LinkType.Location} />
+            <LabelWithIcon value={contact.websites.personal} icon={<MdLanguage />} clickableNav={LinkType.Website} />
+            <LabelWithIcon value={contact.websites.linkedIn} icon={<FaLinkedin />} clickableNav={LinkType.Website} />
+            <LabelWithIcon value={contact.websites.gitHub} icon={<FaGithub />} clickableNav={LinkType.Website} />
         </Stack>
     );
 };
@@ -112,27 +76,102 @@ const Skills = () => {
     return (
         <Stack gap={2} maxW={'250px'} data-print-skill-block>
             {qualifications.map((qualification, index) => (
-                <Stack key={index} align={['flex-start', 'flex-end']}>
+                <Stack key={index}>
                     <Box fontSize={'sm'} fontWeight={'bold'} textTransform={'uppercase'}>
                         {qualification.title}
                     </Box>
-                    <Wrap justify={['flex-start', 'flex-end']} maxW={'250px'}>
-                        {qualification.children.map((skill, index) => (
-                            <Box key={index} fontSize={'sm'} as={'span'} data-print-skill-item>
-                                {skill}
-                            </Box>
-                        ))}
-                    </Wrap>
+                    <Stack gap={2} align={['flex-start', 'flex-end']} w={'100%'}>
+                        {renderQualification(qualification.id, qualification.children)}
+                    </Stack>
                 </Stack>
             ))}
         </Stack>
     );
 };
 
-enum LinkType {
-    None,
-    Mail,
-    Website,
-    Phone,
-    Location,
-}
+const renderQualification = (id: string, skills: (string | CategoricalValue)[]) => {
+    return skills.map((skill, index) => {
+        switch (id) {
+            case 'languages':
+                return <LanguageSkill skill={skill} />;
+            case 'tools':
+                return <ToolSkill skill={skill} />;
+            case 'likes':
+                return <LikesSkill skill={skill} />;
+            default:
+                return null;
+        }
+    });
+};
+
+const LanguageSkill: React.FC<{ skill: string | CategoricalValue }> = ({ skill }) => {
+    if (typeof skill === 'string') {
+        return (
+            <Text key={skill} fontSize={'sm'} data-print-skill-item>
+                {skill}
+            </Text>
+        );
+    }
+
+    let icon: JSX.Element;
+    switch (skill.category.toLowerCase()) {
+        case 'strong':
+            icon = <ThreeDotIcon reverse={[false, true]} />;
+            break;
+        case 'proficient':
+            icon = <TwoDotIcon reverse={[false, true]} />;
+            break;
+        case 'exposure':
+            icon = <OneDotIcon reverse={[false, true]} />;
+            break;
+        default:
+            throw new Error(`Unknown skill category: ${skill.category}`);
+    }
+
+    return (
+        <Text key={skill.category} fontSize={'sm'} data-print-skill-item>
+            <LabelWithIcon key={skill.category} value={skill.values.join(', ')} icon={icon} />
+        </Text>
+    );
+};
+
+const ToolSkill: React.FC<{ skill: string | CategoricalValue }> = ({ skill }) => {
+    if (typeof skill === 'string') {
+        return (
+            <Text key={skill} fontSize={'sm'} data-print-skill-item>
+                {skill}
+            </Text>
+        );
+    }
+
+    let icon: JSX.Element;
+    switch (skill.category.toLowerCase()) {
+        case 'frontend':
+            icon = <MdTv />;
+            break;
+        case 'backend':
+            icon = <FaServer />;
+            break;
+        case 'infra':
+            icon = <MdCloud />;
+            break;
+        default:
+            throw new Error(`Unknown skill category: ${skill.category}`);
+    }
+
+    return (
+        <Text key={skill.category} fontSize={'sm'} data-print-skill-item>
+            <LabelWithIcon value={skill.values.join(', ')} icon={icon} />
+        </Text>
+    );
+};
+
+const LikesSkill: React.FC<{ skill: string | CategoricalValue }> = ({ skill }) => {
+    const skillText = typeof skill === 'string' ? skill : skill.values.join(', ');
+
+    return (
+        <Text key={skillText} fontSize={'sm'} data-print-skill-item>
+            <LabelWithIcon value={skillText} icon={<FaDiamond />} />
+        </Text>
+    );
+};
