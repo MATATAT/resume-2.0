@@ -1,9 +1,10 @@
-import { Box, Heading, IconButton, VStack } from '@chakra-ui/react';
-import { FiPrinter } from 'react-icons/fi';
+import { Box, Heading, VStack } from '@chakra-ui/react';
 import { useResume } from '~/context/ResumeContext';
+import { DownloadPdf } from '~/shared/components/pdf/DownloadPdf';
 
 export const Header = () => {
-    const { name, title } = useResume();
+    const resumeData = useResume();
+    const { name, title } = resumeData;
 
     const handlePrint = () => {
         window.print();
@@ -11,17 +12,7 @@ export const Header = () => {
 
     return (
         <Box position='relative' bg={'headerBg'}>
-            <IconButton
-                variant={'surface'}
-                aria-label='Print resume'
-                position='absolute'
-                right={4}
-                top={4}
-                onClick={handlePrint}
-                data-print-hide
-            >
-                <FiPrinter />
-            </IconButton>
+            <DownloadPdf position={'absolute'} right={4} top={4} />
             <VStack
                 gap={2}
                 py={8}

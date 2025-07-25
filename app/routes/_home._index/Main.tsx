@@ -8,7 +8,7 @@ export const Main = () => {
     return (
         <Box as={'main'} maxW={{ lg: '1000px' }}>
             <Heading as={'h3'} fontWeight={'bold'} textTransform={'uppercase'} pl={[0, 3]}>
-                Work Experience
+                Professional Experience
             </Heading>
             <Stack gap={5} pl={[4, 8]}>
                 {experience.map((exp) => (
