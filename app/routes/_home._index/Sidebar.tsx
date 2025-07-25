@@ -116,13 +116,13 @@ const LanguageSkill: React.FC<{ skill: string | CategoricalValue }> = ({ skill }
     let icon: JSX.Element;
     switch (skill.category.toLowerCase()) {
         case 'strong':
-            icon = <ThreeDotIcon />;
+            icon = <ThreeDotIcon reverse={[false, true]} />;
             break;
         case 'proficient':
-            icon = <TwoDotIcon />;
+            icon = <TwoDotIcon reverse={[false, true]} />;
             break;
         case 'exposure':
-            icon = <OneDotIcon />;
+            icon = <OneDotIcon reverse={[false, true]} />;
             break;
         default:
             throw new Error(`Unknown skill category: ${skill.category}`);
