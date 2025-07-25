@@ -42,17 +42,32 @@ const Contacts = () => {
     const LabelWithIcon = ({
         contact,
         icon,
-        convertToLink,
+        clickableNav = LinkType.None,
     }: {
         contact: string;
         icon: React.ReactNode;
-        convertToLink?: boolean;
+        clickableNav: LinkType;
     }) => {
+        const convert = (contact: string, linkType: LinkType): string => {
+            switch (linkType) {
+                case LinkType.Mail:
+                    return `mailto:${contact}`;
+                case LinkType.Website:
+                    return `https://${contact}`;
+                case LinkType.Phone:
+                    return `tel:${contact}`;
+                case LinkType.Location:
+                    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact)}`;
+                default:
+                    return contact;
+            }
+        };
+
         return (
             <Stack direction={['row-reverse', 'row']} align={'center'} gap={2}>
                 <Box>
-                    {convertToLink ? (
-                        <Link href={`https://${contact}`} target='_blank' rel='noopener noreferrer'>
+                    {clickableNav ? (
+                        <Link href={convert(contact, clickableNav)} target='_blank' rel='noopener noreferrer'>
                             {contact}
                         </Link>
                     ) : (
@@ -66,12 +81,12 @@ const Contacts = () => {
 
     return (
         <Stack align={['flex-start', 'flex-end']}>
-            <LabelWithIcon contact={contact.email} icon={<MdEmail />} />
-            <LabelWithIcon contact={contact.phone} icon={<MdPhone />} />
-            <LabelWithIcon contact={contact.location} icon={<MdLocationPin />} />
-            <LabelWithIcon contact={contact.websites.personal} icon={<MdLanguage />} convertToLink />
-            <LabelWithIcon contact={contact.websites.linkedIn} icon={<FaLinkedin />} convertToLink />
-            <LabelWithIcon contact={contact.websites.gitHub} icon={<FaGithub />} convertToLink />
+            <LabelWithIcon contact={contact.email} icon={<MdEmail />} clickableNav={LinkType.Mail} />
+            <LabelWithIcon contact={contact.phone} icon={<MdPhone />} clickableNav={LinkType.Phone} />
+            <LabelWithIcon contact={contact.location} icon={<MdLocationPin />} clickableNav={LinkType.Location} />
+            <LabelWithIcon contact={contact.websites.personal} icon={<MdLanguage />} clickableNav={LinkType.Website} />
+            <LabelWithIcon contact={contact.websites.linkedIn} icon={<FaLinkedin />} clickableNav={LinkType.Website} />
+            <LabelWithIcon contact={contact.websites.gitHub} icon={<FaGithub />} clickableNav={LinkType.Website} />
         </Stack>
     );
 };
@@ -113,3 +128,11 @@ const Skills = () => {
         </Stack>
     );
 };
+
+enum LinkType {
+    None,
+    Mail,
+    Website,
+    Phone,
+    Location,
+}
