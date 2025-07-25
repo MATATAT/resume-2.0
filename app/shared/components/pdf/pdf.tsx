@@ -96,6 +96,15 @@ const styles = StyleSheet.create({
         fontSize: 10,
         flex: 1,
     },
+    summary: {
+        fontSize: 10,
+        color: '#666',
+        fontStyle: 'italic',
+        marginTop: 3,
+        marginBottom: 6,
+        paddingLeft: 15,
+        paddingRight: 15,
+    },
     qualificationSection: {
         marginBottom: 10,
     },
@@ -243,7 +252,7 @@ export const ResumePDF = ({ data }: ResumePDFProps) => (
             <View style={styles.section}>
                 <Text style={styles.sectionHeading}>Professional Experience</Text>
                 {data.experience.map((exp, index) => (
-                    <View key={index} style={styles.experienceItem}>
+                    <View key={index} style={styles.experienceItem} wrap={false}>
                         <View style={styles.jobHeader}>
                             <View>
                                 <Text style={styles.position}>{exp.position}</Text>
@@ -253,6 +262,7 @@ export const ResumePDF = ({ data }: ResumePDFProps) => (
                                 {exp.startDate} - {exp.endDate || 'Current'} / {exp.location}
                             </Text>
                         </View>
+                        {exp.summary && <Text style={styles.summary}>{exp.summary}</Text>}
                         {exp.notes.map((note, noteIndex) => (
                             <View key={noteIndex} style={styles.bulletPointContainer}>
                                 <Text style={styles.bullet}>•</Text>

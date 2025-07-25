@@ -26,6 +26,7 @@ export interface Institution {
     location: string;
     startDate: string;
     endDate: string;
+    summary: string;
     notes: Notes;
 }
 
