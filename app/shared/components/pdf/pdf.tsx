@@ -1,5 +1,5 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
-import type { Resume } from '../../../dto/resume';
+import type { CategoricalValue, Resume } from '../../../dto/resume';
 
 const styles = StyleSheet.create({
     page: {
@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     },
     section: {
         marginBottom: 20,
-        breakInside: 'avoid',
     },
     header: {
         marginBottom: 20,
@@ -62,7 +61,10 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         marginLeft: 15,
         marginRight: 15,
-        breakInside: 'avoid',
+        orphans: 3,
+        widows: 3,
+        minHeight: 50,
+        backgroundColor: 'transparent',
     },
     jobHeader: {
         flexDirection: 'row',
@@ -71,11 +73,11 @@ const styles = StyleSheet.create({
     },
     company: {
         fontSize: 12,
-        fontWeight: 'bold',
+        fontWeight: 'normal',
     },
     position: {
         fontSize: 12,
-        fontStyle: 'italic',
+        fontWeight: 'bold',
     },
     dates: {
         fontSize: 10,
@@ -96,7 +98,6 @@ const styles = StyleSheet.create({
     },
     qualificationSection: {
         marginBottom: 10,
-        breakInside: 'avoid',
     },
     qualificationTitle: {
         fontSize: 12,
@@ -104,9 +105,8 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     qualificationList: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 5,
+        flexDirection: 'column',
+        gap: 3,
     },
     qualificationItem: {
         fontSize: 10,
@@ -114,11 +114,105 @@ const styles = StyleSheet.create({
         padding: '2 5',
         borderRadius: 3,
     },
+    categorizedSkill: {
+        marginBottom: 8,
+    },
+    categoryHeader: {
+        fontSize: 10,
+        fontWeight: 'bold',
+        marginBottom: 3,
+        marginRight: 8,
+    },
+    categoryHeaderInline: {
+        fontSize: 10,
+        fontWeight: 'bold',
+        marginRight: 8,
+        alignSelf: 'center',
+    },
+    languageSkillRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        marginBottom: 5,
+        gap: 5,
+    },
+    likesRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 5,
+        marginBottom: 5,
+    },
+    categoryItems: {
+        fontSize: 10,
+        marginLeft: 10,
+        marginBottom: 2,
+    },
 });
 
 interface ResumePDFProps {
     data: Resume;
 }
+
+// Helper function to render skills based on type
+const renderSkillItem = (skill: string | CategoricalValue, qualificationId: string) => {
+    if (typeof skill === 'string') {
+        return <Text style={styles.qualificationItem}>{skill}</Text>;
+    }
+
+    // Handle categorized skills - special handling for languages
+    if (qualificationId === 'languages') {
+        return (
+            <View style={styles.languageSkillRow}>
+                <Text style={styles.categoryHeaderInline}>{skill.category.toUpperCase()}:</Text>
+                {skill.values
+                    .join(', ')
+                    .split(', ')
+                    .map((item, index) => (
+                        <Text key={index} style={styles.qualificationItem}>
+                            {item.trim()}
+                        </Text>
+                    ))}
+            </View>
+        );
+    }
+
+    // Handle other categorized skills (tools, etc.)
+    if (qualificationId === 'tools') {
+        return (
+            <View style={styles.languageSkillRow}>
+                <Text style={styles.categoryHeaderInline}>{skill.category.toUpperCase()}:</Text>
+                {skill.values
+                    .join(', ')
+                    .split(', ')
+                    .map((item, index) => (
+                        <Text key={index} style={styles.qualificationItem}>
+                            {item.trim()}
+                        </Text>
+                    ))}
+            </View>
+        );
+    }
+
+    // Handle likes - display in horizontal row with bubbles
+    if (qualificationId === 'likes') {
+        if (typeof skill === 'string') {
+            return <Text style={styles.qualificationItem}>{skill}</Text>;
+        }
+        return skill.values.map((item, index) => (
+            <Text key={index} style={styles.qualificationItem}>
+                {item.trim()}
+            </Text>
+        ));
+    }
+
+    // Handle other categorized skills
+    return (
+        <View style={styles.categorizedSkill}>
+            <Text style={styles.categoryHeader}>{skill.category.toUpperCase()}:</Text>
+            <Text style={styles.categoryItems}>{skill.values.join(', ')}</Text>
+        </View>
+    );
+};
 
 export const ResumePDF = ({ data }: ResumePDFProps) => (
     <Document>
@@ -152,17 +246,19 @@ export const ResumePDF = ({ data }: ResumePDFProps) => (
                     <View key={index} style={styles.experienceItem}>
                         <View style={styles.jobHeader}>
                             <View>
-                                <Text style={styles.company}>{exp.name}</Text>
                                 <Text style={styles.position}>{exp.position}</Text>
+                                <Text style={styles.company}>{exp.name}</Text>
                             </View>
                             <Text style={styles.dates}>
-                                {exp.startDate} - {exp.endDate || 'Present'}
+                                {exp.startDate} - {exp.endDate || 'Current'} / {exp.location}
                             </Text>
                         </View>
                         {exp.notes.map((note, noteIndex) => (
                             <View key={noteIndex} style={styles.bulletPointContainer}>
                                 <Text style={styles.bullet}>•</Text>
-                                <Text style={styles.bulletText}>{note}</Text>
+                                <Text style={styles.bulletText}>
+                                    {typeof note === 'string' ? note : note.values.join(', ')}
+                                </Text>
                             </View>
                         ))}
                     </View>
@@ -175,11 +271,9 @@ export const ResumePDF = ({ data }: ResumePDFProps) => (
                 {data.qualifications.map((qual, index) => (
                     <View key={index} style={styles.qualificationSection}>
                         <Text style={styles.qualificationTitle}>{qual.title}</Text>
-                        <View style={styles.qualificationList}>
+                        <View style={qual.id === 'likes' ? styles.likesRow : styles.qualificationList}>
                             {qual.children.map((skill, skillIndex) => (
-                                <Text key={skillIndex} style={styles.qualificationItem}>
-                                    {skill}
-                                </Text>
+                                <View key={skillIndex}>{renderSkillItem(skill, qual.id)}</View>
                             ))}
                         </View>
                     </View>
@@ -194,6 +288,7 @@ export const ResumePDF = ({ data }: ResumePDFProps) => (
                         <View>
                             <Text style={styles.company}>{data.education.name}</Text>
                             <Text style={styles.position}>{data.education.position}</Text>
+                            <Text style={styles.bulletText}>{data.education.location}</Text>
                         </View>
                         <Text style={styles.dates}>
                             {data.education.startDate} - {data.education.endDate}
