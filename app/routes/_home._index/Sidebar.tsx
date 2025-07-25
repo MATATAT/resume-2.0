@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Icon, Stack, VStack, Wrap } from '@chakra-ui/react';
+import { Box, Flex, Heading, Icon, Link, Stack, VStack, Wrap } from '@chakra-ui/react';
 import type React from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa6';
 import { MdEmail, MdLanguage, MdLocationPin, MdPhone } from 'react-icons/md';
@@ -39,10 +39,41 @@ const SideBlock = ({ title, children }: SideBlockProps) => {
 const Contacts = () => {
     const { contact } = useResume();
 
-    const LabelWithIcon = ({ contact, icon }: { contact: string; icon: React.ReactNode }) => {
+    const LabelWithIcon = ({
+        contact,
+        icon,
+        clickableNav = LinkType.None,
+    }: {
+        contact: string;
+        icon: React.ReactNode;
+        clickableNav: LinkType;
+    }) => {
+        const convert = (contact: string, linkType: LinkType): string => {
+            switch (linkType) {
+                case LinkType.Mail:
+                    return `mailto:${contact}`;
+                case LinkType.Website:
+                    return `https://${contact}`;
+                case LinkType.Phone:
+                    return `tel:${contact}`;
+                case LinkType.Location:
+                    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact)}`;
+                default:
+                    return contact;
+            }
+        };
+
         return (
             <Stack direction={['row-reverse', 'row']} align={'center'} gap={2}>
-                <Box>{contact}</Box>
+                <Box>
+                    {clickableNav ? (
+                        <Link href={convert(contact, clickableNav)} target='_blank' rel='noopener noreferrer'>
+                            {contact}
+                        </Link>
+                    ) : (
+                        contact
+                    )}
+                </Box>
                 <Icon boxSize={5}>{icon}</Icon>
             </Stack>
         );
@@ -50,12 +81,12 @@ const Contacts = () => {
 
     return (
         <Stack align={['flex-start', 'flex-end']}>
-            <LabelWithIcon contact={contact.email} icon={<MdEmail />} />
-            <LabelWithIcon contact={contact.phone} icon={<MdPhone />} />
-            <LabelWithIcon contact={contact.location} icon={<MdLocationPin />} />
-            <LabelWithIcon contact={contact.websites.personal} icon={<MdLanguage />} />
-            <LabelWithIcon contact={contact.websites.linkedIn} icon={<FaLinkedin />} />
-            <LabelWithIcon contact={contact.websites.gitHub} icon={<FaGithub />} />
+            <LabelWithIcon contact={contact.email} icon={<MdEmail />} clickableNav={LinkType.Mail} />
+            <LabelWithIcon contact={contact.phone} icon={<MdPhone />} clickableNav={LinkType.Phone} />
+            <LabelWithIcon contact={contact.location} icon={<MdLocationPin />} clickableNav={LinkType.Location} />
+            <LabelWithIcon contact={contact.websites.personal} icon={<MdLanguage />} clickableNav={LinkType.Website} />
+            <LabelWithIcon contact={contact.websites.linkedIn} icon={<FaLinkedin />} clickableNav={LinkType.Website} />
+            <LabelWithIcon contact={contact.websites.gitHub} icon={<FaGithub />} clickableNav={LinkType.Website} />
         </Stack>
     );
 };
@@ -97,3 +128,11 @@ const Skills = () => {
         </Stack>
     );
 };
+
+enum LinkType {
+    None,
+    Mail,
+    Website,
+    Phone,
+    Location,
+}
