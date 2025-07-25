@@ -25,7 +25,7 @@ const config = defineConfig({
                 headerTitle: {
                     value: {
                         base: 'colors.white',
-                        _dark: 'colors.white',
+                        _dark: 'colors.blue.400',
                     },
                 },
                 headerSubtitle: {

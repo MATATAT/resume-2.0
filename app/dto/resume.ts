@@ -30,8 +30,14 @@ export interface Institution {
 }
 
 export interface Qualification {
+    id: string;
     title: string;
     children: Notes;
 }
 
-export type Notes = Array<string>;
+export interface CategoricalValue {
+    category: string;
+    values: Array<string>;
+}
+
+export type Notes = Array<string | CategoricalValue>;
