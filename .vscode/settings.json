@@ -5,6 +5,7 @@
         "source.organizeImports": "always",
         "source.fixAll.eslint": "always"
     },
+    "typescript.preferences.importModuleSpecifier": "shortest",
     "[terraform]": {
         "editor.defaultFormatter": "hashicorp.terraform"
     }
