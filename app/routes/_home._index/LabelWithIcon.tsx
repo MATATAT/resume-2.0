@@ -32,7 +32,7 @@ export const LabelWithIcon = ({
                         <Text textAlign={['left', 'right']}>{value}</Text>
                     </Link>
                 ) : (
-                    <Text textAlign={['left', 'right']}>{value}</Text>
+                    <Box textAlign={['left', 'right']}>{value}</Box>
                 )}
             </Box>
             <Icon boxSize={5} color={'blue.400'}>

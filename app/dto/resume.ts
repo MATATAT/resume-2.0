@@ -33,7 +33,7 @@ export interface Institution {
 export interface Qualification {
     id: string;
     title: string;
-    children: Notes;
+    children: Skills;
 }
 
 export interface CategoricalValue {
@@ -41,4 +41,18 @@ export interface CategoricalValue {
     values: Array<string>;
 }
 
-export type Notes = Array<string | CategoricalValue>;
+export interface RankedCategoricalValue extends CategoricalValue {
+    rank: Rank;
+}
+
+export enum Rank {
+    High = 'high',
+    Medium = 'medium',
+    Low = 'low',
+}
+
+export type Notes = Array<string>;
+
+export type Skill = string | CategoricalValue | RankedCategoricalValue;
+
+export type Skills = Array<Skill>;

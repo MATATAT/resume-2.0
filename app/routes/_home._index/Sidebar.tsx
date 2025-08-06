@@ -4,8 +4,9 @@ import type { JSX } from 'react';
 import { FaDiamond, FaGithub, FaLinkedin, FaServer } from 'react-icons/fa6';
 import { MdCloud, MdEmail, MdLanguage, MdLocationPin, MdPhone, MdTv } from 'react-icons/md';
 import { useResume } from '~/context/ResumeContext';
-import type { CategoricalValue } from '~/dto/resume';
+import { Rank, type CategoricalValue, type Skill, type Skills } from '~/dto/resume';
 import { OneDotIcon, ThreeDotIcon, TwoDotIcon } from '~/shared/components/LocalIcons';
+import { isRankedCategoricalValue } from '~/util/type-guards';
 import { LabelWithIcon, LinkType } from './LabelWithIcon';
 
 export const Sidebar = () => {
@@ -89,56 +90,59 @@ const Skills = () => {
     );
 };
 
-const renderQualification = (id: string, skills: (string | CategoricalValue)[]) => {
+const renderQualification = (id: string, skills: Skills) => {
     return skills.map((skill, index) => {
+        const key = `${id}-${index}`;
         switch (id) {
             case 'languages':
-                return <LanguageSkill skill={skill} />;
+                return <LanguageSkill key={key} skill={skill} />;
             case 'tools':
-                return <ToolSkill skill={skill} />;
+                return <ToolSkill key={key} skill={skill} />;
             case 'likes':
-                return <LikesSkill skill={skill} />;
+                return <LikesSkill key={key} skill={skill} />;
             default:
                 return null;
         }
     });
 };
 
-const LanguageSkill: React.FC<{ skill: string | CategoricalValue }> = ({ skill }) => {
+const LanguageSkill: React.FC<{ skill: Skill }> = ({ skill }) => {
     if (typeof skill === 'string') {
         return (
-            <Text key={skill} fontSize={'sm'} data-print-skill-item>
+            <Text fontSize={'sm'} data-print-skill-item>
                 {skill}
             </Text>
         );
     }
 
-    let icon: JSX.Element;
-    switch (skill.category.toLowerCase()) {
-        case 'strong':
-            icon = <ThreeDotIcon reverse={[false, true]} />;
-            break;
-        case 'proficient':
-            icon = <TwoDotIcon reverse={[false, true]} />;
-            break;
-        case 'exposure':
-            icon = <OneDotIcon reverse={[false, true]} />;
-            break;
-        default:
-            throw new Error(`Unknown skill category: ${skill.category}`);
+    let icon: JSX.Element = <></>;
+    if (isRankedCategoricalValue(skill)) {
+        switch (skill.rank) {
+            case Rank.High:
+                icon = <ThreeDotIcon reverse={[false, true]} />;
+                break;
+            case Rank.Medium:
+                icon = <TwoDotIcon reverse={[false, true]} />;
+                break;
+            case Rank.Low:
+                icon = <OneDotIcon reverse={[false, true]} />;
+                break;
+            default:
+                throw new Error(`Unknown skill category: ${skill.category}`);
+        }
     }
 
     return (
-        <Text key={skill.category} fontSize={'sm'} data-print-skill-item>
-            <LabelWithIcon key={skill.category} value={skill.values.join(', ')} icon={icon} />
-        </Text>
+        <Box fontSize={'sm'} data-print-skill-item>
+            <LabelWithIcon value={skill.values.join(', ')} icon={icon} />
+        </Box>
     );
 };
 
 const ToolSkill: React.FC<{ skill: string | CategoricalValue }> = ({ skill }) => {
     if (typeof skill === 'string') {
         return (
-            <Text key={skill} fontSize={'sm'} data-print-skill-item>
+            <Text fontSize={'sm'} data-print-skill-item>
                 {skill}
             </Text>
         );
@@ -160,9 +164,9 @@ const ToolSkill: React.FC<{ skill: string | CategoricalValue }> = ({ skill }) =>
     }
 
     return (
-        <Text key={skill.category} fontSize={'sm'} data-print-skill-item>
+        <Box fontSize={'sm'} data-print-skill-item>
             <LabelWithIcon value={skill.values.join(', ')} icon={icon} />
-        </Text>
+        </Box>
     );
 };
 
@@ -170,8 +174,8 @@ const LikesSkill: React.FC<{ skill: string | CategoricalValue }> = ({ skill }) =
     const skillText = typeof skill === 'string' ? skill : skill.values.join(', ');
 
     return (
-        <Text key={skillText} fontSize={'sm'} data-print-skill-item>
+        <Box fontSize={'sm'} data-print-skill-item>
             <LabelWithIcon value={skillText} icon={<FaDiamond />} />
-        </Text>
+        </Box>
     );
 };

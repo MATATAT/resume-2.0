@@ -39,7 +39,7 @@ const ExperienceBlock = ({ name, position, location, startDate, endDate, summary
             <List.Root pl={8}>
                 {notes.map((note, index) => (
                     <List.Item key={index} pl={4}>
-                        {typeof note === 'string' ? note : note.values.join(', ')}
+                        {note}
                     </List.Item>
                 ))}
             </List.Root>

@@ -1,4 +1,4 @@
-import { Text, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Text, useBreakpointValue } from '@chakra-ui/react';
 
 type LocalIconsProps = React.ComponentProps<typeof Text> & { reverse: boolean | boolean[] | null };
 
@@ -17,7 +17,7 @@ const DOTS = {
 export const ThreeDotIcon = ({ reverse, ...props }: LocalIconsProps) => {
     const isReversed = reverse ? useBreakpointValue(convertToBreakpointValue(reverse)) : null;
     return (
-        <Text
+        <Box
             display={'inline-block'}
             style={{ width: 'fit-content', height: 'fit-content' }}
             whiteSpace={'nowrap'}
@@ -25,14 +25,14 @@ export const ThreeDotIcon = ({ reverse, ...props }: LocalIconsProps) => {
             {...props}
         >
             {isReversed ? reverseText(DOTS.three) : DOTS.three}
-        </Text>
+        </Box>
     );
 };
 
 export const TwoDotIcon = ({ reverse, ...props }: LocalIconsProps) => {
     const isReversed = reverse ? useBreakpointValue(convertToBreakpointValue(reverse)) : null;
     return (
-        <Text
+        <Box
             display={'inline-block'}
             style={{ width: 'fit-content', height: 'fit-content' }}
             whiteSpace={'nowrap'}
@@ -40,14 +40,14 @@ export const TwoDotIcon = ({ reverse, ...props }: LocalIconsProps) => {
             {...props}
         >
             {isReversed ? reverseText(DOTS.two) : DOTS.two}
-        </Text>
+        </Box>
     );
 };
 
 export const OneDotIcon = ({ reverse, ...props }: LocalIconsProps) => {
     const isReversed = reverse ? useBreakpointValue(convertToBreakpointValue(reverse)) : null;
     return (
-        <Text
+        <Box
             display={'inline-block'}
             style={{ width: 'fit-content', height: 'fit-content' }}
             whiteSpace={'nowrap'}
@@ -55,6 +55,6 @@ export const OneDotIcon = ({ reverse, ...props }: LocalIconsProps) => {
             {...props}
         >
             {isReversed ? reverseText(DOTS.one) : DOTS.one}
-        </Text>
+        </Box>
     );
 };

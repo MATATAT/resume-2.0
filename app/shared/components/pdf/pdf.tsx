@@ -1,5 +1,5 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
-import type { CategoricalValue, Resume } from '../../../dto/resume';
+import type { Resume, Skill } from '~/dto/resume';
 
 const styles = StyleSheet.create({
     page: {
@@ -163,7 +163,7 @@ interface ResumePDFProps {
 }
 
 // Helper function to render skills based on type
-const renderSkillItem = (skill: string | CategoricalValue, qualificationId: string) => {
+const renderSkillItem = (skill: Skill, qualificationId: string) => {
     if (typeof skill === 'string') {
         return <Text style={styles.qualificationItem}>{skill}</Text>;
     }
@@ -266,9 +266,7 @@ export const ResumePDF = ({ data }: ResumePDFProps) => (
                         {exp.notes.map((note, noteIndex) => (
                             <View key={noteIndex} style={styles.bulletPointContainer}>
                                 <Text style={styles.bullet}>•</Text>
-                                <Text style={styles.bulletText}>
-                                    {typeof note === 'string' ? note : note.values.join(', ')}
-                                </Text>
+                                <Text style={styles.bulletText}>{note}</Text>
                             </View>
                         ))}
                     </View>
