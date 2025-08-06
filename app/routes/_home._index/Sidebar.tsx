@@ -78,9 +78,14 @@ const Skills = () => {
         <Stack gap={2} maxW={'250px'} data-print-skill-block>
             {qualifications.map((qualification, index) => (
                 <Stack key={index}>
-                    <Box fontSize={'sm'} fontWeight={'bold'} textTransform={'uppercase'}>
+                    <Flex
+                        fontSize={'sm'}
+                        fontWeight={'bold'}
+                        textTransform={'uppercase'}
+                        justifyContent={['flex-start', 'flex-end']}
+                    >
                         {qualification.title}
-                    </Box>
+                    </Flex>
                     <Stack gap={2} align={['flex-start', 'flex-end']} w={'100%'}>
                         {renderQualification(qualification.id, qualification.children)}
                     </Stack>
