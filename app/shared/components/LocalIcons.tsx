@@ -1,6 +1,7 @@
-import { Box, Text, useBreakpointValue } from '@chakra-ui/react';
+import { HStack, type StackProps } from '@chakra-ui/react';
+import { MdCircle, MdOutlineCircle } from 'react-icons/md';
 
-type LocalIconsProps = React.ComponentProps<typeof Text> & { reverse: boolean | boolean[] | null };
+type LocalIconsProps = StackProps;
 
 const reverseText = (text: string) => {
     return text.split('').reverse().join('');
@@ -8,53 +9,48 @@ const reverseText = (text: string) => {
 
 const convertToBreakpointValue = (value: boolean | boolean[]): boolean[] => (Array.isArray(value) ? value : [value]);
 
-const DOTS = {
-    three: '●●●',
-    two: '●●○',
-    one: '●○○',
-} as const;
+const Dot = ({ count }: { count: number }) => (
+    <>
+        {Array.from({ length: 3 }, (_, index) => (
+            <span key={index}>{index < count ? <MdCircle /> : <MdOutlineCircle />}</span>
+        ))}
+    </>
+);
 
-export const ThreeDotIcon = ({ reverse, ...props }: LocalIconsProps) => {
-    const isReversed = reverse ? useBreakpointValue(convertToBreakpointValue(reverse)) : null;
+const DotContainer = ({ children, ...props }: LocalIconsProps) => {
     return (
-        <Box
-            display={'inline-block'}
+        <HStack
+            gap={0}
             style={{ width: 'fit-content', height: 'fit-content' }}
             whiteSpace={'nowrap'}
             verticalAlign={'middle'}
+            flexDir={['row', 'row-reverse']}
             {...props}
         >
-            {isReversed ? reverseText(DOTS.three) : DOTS.three}
-        </Box>
+            {children}
+        </HStack>
     );
 };
 
-export const TwoDotIcon = ({ reverse, ...props }: LocalIconsProps) => {
-    const isReversed = reverse ? useBreakpointValue(convertToBreakpointValue(reverse)) : null;
+export const ThreeDotIcon = (props: LocalIconsProps) => {
     return (
-        <Box
-            display={'inline-block'}
-            style={{ width: 'fit-content', height: 'fit-content' }}
-            whiteSpace={'nowrap'}
-            verticalAlign={'middle'}
-            {...props}
-        >
-            {isReversed ? reverseText(DOTS.two) : DOTS.two}
-        </Box>
+        <DotContainer {...props}>
+            <Dot count={3} />
+        </DotContainer>
     );
 };
 
-export const OneDotIcon = ({ reverse, ...props }: LocalIconsProps) => {
-    const isReversed = reverse ? useBreakpointValue(convertToBreakpointValue(reverse)) : null;
+export const TwoDotIcon = (props: LocalIconsProps) => {
     return (
-        <Box
-            display={'inline-block'}
-            style={{ width: 'fit-content', height: 'fit-content' }}
-            whiteSpace={'nowrap'}
-            verticalAlign={'middle'}
-            {...props}
-        >
-            {isReversed ? reverseText(DOTS.one) : DOTS.one}
-        </Box>
+        <DotContainer {...props}>
+            <Dot count={2} />
+        </DotContainer>
+    );
+};
+export const OneDotIcon = (props: LocalIconsProps) => {
+    return (
+        <DotContainer {...props}>
+            <Dot count={1} />
+        </DotContainer>
     );
 };

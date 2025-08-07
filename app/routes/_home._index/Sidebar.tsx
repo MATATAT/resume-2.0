@@ -124,13 +124,13 @@ const LanguageSkill: React.FC<{ skill: Skill }> = ({ skill }) => {
     if (isRankedCategoricalValue(skill)) {
         switch (skill.rank) {
             case Rank.High:
-                icon = <ThreeDotIcon reverse={[false, true]} />;
+                icon = <ThreeDotIcon />;
                 break;
             case Rank.Medium:
-                icon = <TwoDotIcon reverse={[false, true]} />;
+                icon = <TwoDotIcon />;
                 break;
             case Rank.Low:
-                icon = <OneDotIcon reverse={[false, true]} />;
+                icon = <OneDotIcon />;
                 break;
             default:
                 throw new Error(`Unknown skill category: ${skill.category}`);
